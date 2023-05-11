@@ -1,6 +1,13 @@
 # kong-api-gw-exercise
 Small exercise to play with OSS Kong API Gateway in Free Mode
 
+The default project:
+
+- Creates 3 services via Docker: `kong-database`, `kong-migrations`, and `kong-gateway` (note that it is also possible to run Kong Gateway in db-less mode if you plan purely to perform configuration via decK but that they are included here for the sake of optionality)
+- Creates a Kong Gateway Service and Route that point to httpbin.org
+- Extends the Gateway using the [Response Transformer](https://docs.konghq.com/hub/kong-inc/response-transformer/) plugin from Kong
+- Adds a header that caches response results for 5 minutes
+
 ## Prerequisites
 
 Before running this application, you will need to have the following prerequisites installed:
@@ -20,7 +27,7 @@ Make sure all of these prerequisites are installed and properly configured befor
 After fulfilling the prerequisites outlined above, you can create the necessary services by running the following command in the root directory of this project:
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 This will start up the Kong Gateway and other services defined in the `docker-compose.yml` file.
@@ -40,3 +47,9 @@ deck sync
 This will configure the Kong Gateway with the necessary services and routes for interfacing with httpbin.org.
 
 Finally, you can use your local Kong Gateway to interface with httpbin.org by navigating to `http://localhost:8000` in your web browser.
+
+When you are ready to deprovision the project, simply run `docker compose down` from the CLI:
+
+```bash
+docker compose down
+```
