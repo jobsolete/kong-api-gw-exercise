@@ -15,8 +15,6 @@ To create these files, simply create two empty text files named `KONG_PASSWORD` 
 
 Make sure all of these prerequisites are installed and properly configured before running this application.
 
-Sure! Here's an example of a "Quickstart Guide" section that you can add to your README.md file:
-
 ## Quickstart Guide
 
 After fulfilling the prerequisites outlined above, you can create the necessary services by running the following command in the root directory of this project:
