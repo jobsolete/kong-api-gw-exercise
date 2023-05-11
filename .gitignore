@@ -1,0 +1,11 @@
+# Common defaults
+.DS_Store
+Thumbs.db
+*.swp
+*.bak
+*.tmp
+*.log
+
+# Additional files to ignore
+KONG_PASSWORD
+POSTGRES_PASSWORD

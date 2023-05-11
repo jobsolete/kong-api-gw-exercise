@@ -1,0 +1,80 @@
+version: '3.9'
+
+networks:
+  kong-net:
+    name: kong-net
+
+services:
+  kong-migrations:
+    image: kong/kong-gateway:3.2.2.1
+    command: kong migrations bootstrap
+    depends_on:
+      - kong-database
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong-database
+      KONG_PG_PASSWORD: /run/secrets/kong_postgres_password
+      KONG_PASSWORD: /run/secrets/kong_password
+    secrets:
+      - kong_postgres_password
+    networks:
+      - kong-net
+
+  kong-gateway:
+    image: kong/kong-gateway:3.2.2.1
+    depends_on:
+      - kong-database
+      - kong-migrations
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong-database
+      KONG_PG_USER: kong
+      KONG_PG_PASSWORD: /run/secrets/kong_postgres_password
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001
+      KONG_ADMIN_GUI_URL: http://localhost:8002
+    healthcheck:
+      test: ["CMD", "kong", "health"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+    restart: on-failure:5
+    secrets:
+      - kong_postgres_password
+    networks:
+      - kong-net
+    ports:
+      - "8000:8000"
+      - "8443:8443"
+      - "8001:8001"
+      - "8444:8444"
+      - "8002:8002"
+      - "8445:8445"
+      - "8003:8003"
+      - "8004:8004"
+
+  kong-database:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: kong
+      POSTGRES_USER: kong
+      POSTGRES_PASSWORD: /run/secrets/kong_postgres_password
+    healthcheck:
+      test: ["CMD", "pg_isready", "-d", "kong", "-U", "kong"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    restart: on-failure
+    secrets:
+      - kong_postgres_password
+    networks:
+      - kong-net
+
+secrets:
+  kong_postgres_password:
+    file: ./POSTGRES_PASSWORD
+  kong_password:
+    file: ./KONG_PASSWORD
