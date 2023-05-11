@@ -3,7 +3,7 @@ Small exercise to play with OSS Kong API Gateway in Free Mode
 
 The default project:
 
-- Creates 3 services via Docker: `kong-database`, `kong-migrations`, and `kong-gateway` (note that it is also possible to run Kong Gateway in db-less mode if you plan purely to perform configuration via decK but that they are included here for the sake of optionality)
+- Creates 3 services via Docker: `kong-database`, `kong-migrations`, and `kong-gateway` (note that it is also possible to run Kong Gateway in db-less mode if you plan purely to perform configuration via decK but that the db-related services are included here for the sake of optionality)
 - Creates a Kong Gateway Service and Route that point to httpbin.org
 - Extends the Gateway using the [Response Transformer](https://docs.konghq.com/hub/kong-inc/response-transformer/) plugin from Kong
 - Adds a header that caches response results for 5 minutes
